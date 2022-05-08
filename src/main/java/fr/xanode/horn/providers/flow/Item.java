@@ -9,4 +9,6 @@ public interface Item {
     String getLink();
     @Override
     String toString();
+    @Override
+    int hashCode();
 }

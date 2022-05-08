@@ -50,4 +50,17 @@ public class RssItem implements Item {
         //return "RssItem [title=" + this.title + ", description=" + this.description + ", link=" + this.link + ", date=" + this.publicationDate + ", guid=" + this.guid + "]";
         return this.title + "\nDate: " + this.publicationDate + "\n" + this.description + "\n" + this.link;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.author == null) ? 0 : this.author.hashCode());
+        result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + ((this.guid == null) ? 0 : this.guid.hashCode());
+        result = prime * result + ((this.link == null) ? 0 : this.link.hashCode());
+        result = prime * result + ((this.publicationDate == null) ? 0 : this.publicationDate.hashCode());
+        result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
+        return result;
+    }
 }

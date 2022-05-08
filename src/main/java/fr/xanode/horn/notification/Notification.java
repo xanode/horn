@@ -12,23 +12,35 @@ public class Notification {
         this.state = NotificationState.UNINITIATED;
     }
 
-    void setNotificationSate(NotificationState state) {
+    public String getSubject() {
+        return this.item.getTitle();
+    }
+
+    public void setNotificationSate(NotificationState state) {
         this.state = state;
     }
 
-    NotificationState getNotificationState() {
+    public NotificationState getNotificationState() {
         return this.state;
     }
 
-    String toPlainText() {
+    public String toPlainText() {
         return "[HORN SECURITY SERVICE] - " + item.getPublicationDate() + "\n"
         + item.getTitle() + "\n\n"
         + item.getDescription() + "\n\n"
         + item.getLink();
     }
 
-    String toMultipart() {
+    public String toMultipart() {
         return this.toPlainText(); // TODO: return mime/multipart data
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((item == null) ? 0 : item.hashCode());
+        return result;
     }
 
 }
