@@ -1,74 +1,34 @@
 package fr.xanode.horn.notification;
 
-import java.util.Date;
+import fr.xanode.horn.providers.flow.Item;
 
 public class Notification {
 
-    private String title;
-    private String message;
-    private String type;
-    private String link;
-    private Identity recipient;
-    private Date sentDate;
+    private final Item item;
+    private NotificationState state;
 
-    public Notification(String title, String message, String type, String link, Identity recipient) {
-        this.title = title;
-        this.message = message;
-        this.type = type;
-        this.link = link;
-        this.recipient = recipient;
+    Notification(Item item) {
+        this.item = item;
+        this.state = NotificationState.UNINITIATED;
     }
 
-    public void send() {
-        this.recipient.getCommunicator().notify(this);
-        this.sentDate = new Date();
+    void setNotificationSate(NotificationState state) {
+        this.state = state;
     }
 
-    public boolean isSent() {
-        return this.sentDate != null;
+    NotificationState getNotificationState() {
+        return this.state;
     }
 
-    public String getTitle() {
-        return title;
+    String toPlainText() {
+        return "[HORN SECURITY SERVICE] - " + item.getPublicationDate() + "\n"
+        + item.getTitle() + "\n\n"
+        + item.getDescription() + "\n\n"
+        + item.getLink();
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    String toMultipart() {
+        return this.toPlainText(); // TODO: return mime/multipart data
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public Identity getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(Identity recipient) {
-        this.recipient = recipient;
-    }
-
-    public Date getSentDate() {
-        return sentDate;
-    }
 }
