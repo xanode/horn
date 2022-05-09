@@ -26,21 +26,22 @@ public class CommunicationProvider {
 
     public void loadNotification(Notification notification) {
         notification.setNotificationSate(NotificationState.PENDING);
+        notification.updateQueuingDate();
         this.notificationQueue.add(notification);
         logger.trace("Notification " + notification.hashCode() + " loaded.");
     }
 
     public void removeNotification(Notification notification) {
         if (notification.getNotificationState() != NotificationState.SENT) {
-            logger.warn("Remove unsent notification " + notification.hashCode() + " !");
+            logger.warn("Remove unsent notification " + notification.hashCode() + " from queue!");
         } else {
-            logger.info("Remove notification " + notification.hashCode() + ".");
+            logger.info("Remove notification " + notification.hashCode() + " from queue.");
         }
         this.notificationQueue.remove(notification);
     }
 
     public void sendNotification(Notification notification) {
-        logger.info("Send notification : " + notification.hashCode());
+        logger.info("Send notification " + notification.hashCode());
         if (!this.notificationQueue.contains(notification)) {
             logger.error("Notification " + notification.hashCode() + " not loaded or already sent!");
             throw new IllegalArgumentException("Notification not loaded or already sent!");

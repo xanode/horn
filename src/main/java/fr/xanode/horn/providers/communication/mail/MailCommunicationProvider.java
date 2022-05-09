@@ -10,13 +10,14 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
 
 public class MailCommunicationProvider extends CommunicationProvider {
 
     private static Logger logger = LogManager.getLogger(MailCommunicationProvider.class);
 
-    MailCommunicationProvider(Properties properties) {
+    public MailCommunicationProvider(Properties properties) {
         super(properties);
     }
 
@@ -41,17 +42,24 @@ public class MailCommunicationProvider extends CommunicationProvider {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(this.getProperties().getProperty("recipient")));
             message.setSubject(notification.getSubject());
 
-            MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.setContent(notification.toPlainText(), "text/html; charset=utf-8");
+            MimeBodyPart mimeBodyPartWithMultipartContent = new MimeBodyPart();
+            mimeBodyPartWithMultipartContent.setContent(notification.toMultipart(), "text/html; charset=utf-8");
+
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(mimeBodyPartWithMultipartContent);
+
+            message.setContent(multipart);
 
             Transport.send(message);
+
+            logger.info("Notification " + notification.hashCode() + " successfully sent.");
+            // Set notification state to sent and remove it from notification queue
+            notification.setNotificationSate(NotificationState.SENT);
+            this.removeNotification(notification);
         } catch (MessagingException e) {
             notification.setNotificationSate(NotificationState.FAILED);
-            logger.error("Failed to send notification " + notification.hashCode() + ".");
+            logger.error("Failed to send notification " + notification.hashCode() + ": " + e.getMessage());
         }
-        // Set notification state to sent and remove it from notification queue
-        notification.setNotificationSate(NotificationState.SENT);
-        this.removeNotification(notification);
     }
 
 }

@@ -10,10 +10,10 @@ import java.util.Locale;
 public class RssItem implements Item {
 
     String author;
-    Date publicationDate;
     String description;
     String guid;
     String link;
+    Date publicationDate;
     String title;
 
     public RssItem(String author, String publicationDate, String description, String guid, String link, String title) throws ParseException {
@@ -26,13 +26,8 @@ public class RssItem implements Item {
     }
 
     @Override
-    public String getTitle() {
-        return this.title;
-    }
-
-    @Override
-    public Date getPublicationDate() {
-        return this.publicationDate;
+    public String getAuthor() {
+        return this.author;
     }
 
     @Override
@@ -41,8 +36,23 @@ public class RssItem implements Item {
     }
 
     @Override
+    public String getGuid() {
+        return this.guid;
+    }
+
+    @Override
     public String getLink() {
         return this.link;
+    }
+
+    @Override
+    public Date getPublicationDate() {
+        return this.publicationDate;
+    }
+
+    @Override
+    public String getTitle() {
+        return this.title;
     }
 
     @Override
@@ -62,5 +72,17 @@ public class RssItem implements Item {
         result = prime * result + ((this.publicationDate == null) ? 0 : this.publicationDate.hashCode());
         result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
         return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Item other)) return false;
+        return this.author.equals(other.getAuthor())
+                && this.description.equals(other.getDescription())
+                && this.guid.equals(other.getGuid())
+                && this.link.equals(other.getLink())
+                && this.publicationDate.equals(other.getPublicationDate())
+                && this.title.equals(other.getTitle());
     }
 }

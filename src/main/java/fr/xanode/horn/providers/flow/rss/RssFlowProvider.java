@@ -21,7 +21,7 @@ public class RssFlowProvider implements FlowProvider {
 
     @Override
     public Item getLastItem() {
-        return this.feed.getItems().get(this.feed.getItems().size());
+        return this.feed.getItems().get(0);
     }
 
     @Override

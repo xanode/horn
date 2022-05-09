@@ -2,22 +2,30 @@ package fr.xanode.horn.notification;
 
 import fr.xanode.horn.providers.flow.Item;
 
-public class Notification {
+import java.util.Date;
+
+public class Notification implements Comparable<Notification> {
 
     private final Item item;
     private NotificationState state;
+    private Date queuingDate;
 
-    Notification(Item item) {
+    public Notification(Item item) {
         this.item = item;
         this.state = NotificationState.UNINITIATED;
+        this.queuingDate = new Date();
     }
 
     public String getSubject() {
-        return this.item.getTitle();
+        return "[HORN SECURITY SERVICE] " + this.item.getTitle();
     }
 
     public void setNotificationSate(NotificationState state) {
         this.state = state;
+    }
+
+    public void updateQueuingDate() {
+        this.queuingDate = new Date();
     }
 
     public NotificationState getNotificationState() {
@@ -25,14 +33,18 @@ public class Notification {
     }
 
     public String toPlainText() {
-        return "[HORN SECURITY SERVICE] - " + item.getPublicationDate() + "\n"
-        + item.getTitle() + "\n\n"
-        + item.getDescription() + "\n\n"
-        + item.getLink();
+        return "A new publicly disclosed cybersecurity vulnerability has been discovered.\n\n"
+                + "Publication date: " + item.getPublicationDate() + "\n\n"
+                + "Title: " + item.getTitle() + "\n\n"
+                + "Description: " + item.getDescription() + "\n\n"
+                + "Link: " + item.getLink();
     }
 
     public String toMultipart() {
-        return this.toPlainText(); // TODO: return mime/multipart data
+        return "<h1>" + this.item.getTitle() + "</h1>\n"
+                + "<p>" + this.item.getPublicationDate() + "</p><br />\n"
+                + "<p>" + this.item.getDescription() + "</p><br />\n"
+                + "<href a=\"" + this.item.getLink() + "\">Additional information here (" + this.item.getLink() +").</href>\n";
     }
 
     @Override
@@ -43,4 +55,17 @@ public class Notification {
         return result;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Notification other)) return false;
+        return this.item.equals(other.item)
+                && this.state.equals(other.state)
+                && this.queuingDate.equals(other.queuingDate);
+    }
+
+    @Override
+    public int compareTo(Notification notification) {
+        return this.queuingDate.compareTo(notification.queuingDate);
+    }
 }
