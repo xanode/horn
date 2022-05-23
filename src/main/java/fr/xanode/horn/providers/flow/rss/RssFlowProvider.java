@@ -5,6 +5,8 @@ import fr.xanode.horn.providers.flow.Item;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class RssFlowProvider implements FlowProvider {
 
@@ -26,23 +28,15 @@ public class RssFlowProvider implements FlowProvider {
 
     @Override
     public ArrayList<Item> getItems(Date oldest, Date newest) {
-        ArrayList<Item> filteredItems = new ArrayList<>();
-        for (Item item: this.getItems()) {
-            if (oldest.before(item.getPublicationDate()) && newest.after(item.getPublicationDate())) {
-                filteredItems.add(item);
-            }
-        }
-        return filteredItems;
+        Predicate<Item> before = item -> oldest.before(item.getPublicationDate());
+        Predicate<Item> after = item -> newest.after(item.getPublicationDate());
+        return (ArrayList<Item>) this.feed.items.stream().filter(before.and(after)).collect(Collectors.toList());
     }
 
     @Override
     public ArrayList<Item> getItems(String regex) {
-        ArrayList<Item> filteredItems = new ArrayList<>();
-        for (Item item: this.getItems()) {
-            if (item.getTitle().matches(regex) || item.getDescription().matches(regex)) {
-                filteredItems.add(item);
-            }
-        }
-        return filteredItems;
+        Predicate<Item> title = item -> item.getTitle().matches(regex);
+        Predicate<Item> description = item -> item.getDescription().matches(regex);
+        return (ArrayList<Item>) this.feed.items.stream().filter(title.and(description)).collect(Collectors.toList());
     }
 }
