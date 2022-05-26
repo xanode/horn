@@ -9,7 +9,7 @@ Table of Contents
 
 ## Introduction
 Horn is a tool that allows you to be notified when a new vulnerability is discovered and announced.
-For the moment it is a very young version, still in active development.
+For the moment it is a very very very young and immature version, still in active development.
 
 ## How to use
 To use Horn, you have to clone this repository and compile the project using `mvn package`.
