@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.Objects;
 
 public class RssParser {
 
@@ -103,7 +104,7 @@ public class RssParser {
                 } else if (event.isEndElement()) {
                     if (event.asEndElement().getName().getLocalPart().equals("item")) {
                         RssItem item = new RssItem(author, publicationDate, description, guid, link, title);
-                        feed.addItem(item);
+                        Objects.requireNonNull(feed).addItem(item);
                         event = eventReader.nextEvent();
                     }
                 }

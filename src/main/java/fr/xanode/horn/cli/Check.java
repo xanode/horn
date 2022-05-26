@@ -3,6 +3,7 @@ package fr.xanode.horn.cli;
 import fr.xanode.horn.providers.flow.FlowProvider;
 import fr.xanode.horn.providers.flow.Item;
 import fr.xanode.horn.providers.flow.rss.RssFlowProvider;
+import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -14,6 +15,7 @@ import java.util.concurrent.Callable;
 @Command(name = "check",
         description = "Interactive check for publicly disclosed vulnerabilities."
 )
+@Slf4j
 public class Check implements Callable<Integer> {
     @Option(names = {"-p", "--pattern"}, split = ",", required = true, description = "Find vulnerabilities matching one of those patterns (could be regex).")
     String[] patterns;

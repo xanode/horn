@@ -3,8 +3,7 @@ package fr.xanode.horn.providers.communication.mail;
 import fr.xanode.horn.notification.Notification;
 import fr.xanode.horn.notification.NotificationState;
 import fr.xanode.horn.providers.communication.CommunicationProvider;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -13,9 +12,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
 
+@Slf4j
 public class MailCommunicationProvider extends CommunicationProvider {
-
-    private static Logger logger = LogManager.getLogger(MailCommunicationProvider.class);
 
     public MailCommunicationProvider(Properties properties) {
         super(properties);
@@ -52,13 +50,13 @@ public class MailCommunicationProvider extends CommunicationProvider {
 
             Transport.send(message);
 
-            logger.info("Notification " + notification.hashCode() + " successfully sent.");
+            log.info("Notification " + notification.hashCode() + " successfully sent.");
             // Set notification state to sent and remove it from notification queue
             notification.setNotificationSate(NotificationState.SENT);
             this.removeNotification(notification);
         } catch (MessagingException e) {
             notification.setNotificationSate(NotificationState.FAILED);
-            logger.error("Failed to send notification " + notification.hashCode() + ": " + e.getMessage());
+            log.error("Failed to send notification " + notification.hashCode() + ": " + e.getMessage());
         }
     }
 
