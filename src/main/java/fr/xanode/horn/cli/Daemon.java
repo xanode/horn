@@ -37,7 +37,7 @@ public class Daemon implements Runnable {
             // Test mails
             if (hornConfigPath == null) {
                 log.info("No configuration file provided: using default location.");
-                hornConfigPath = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "horn.properties";
+                hornConfigPath = "/your/default/directory/horn.properties";
             }
             try {
                 log.info("Loading configuration file "+ hornConfigPath + "...");
