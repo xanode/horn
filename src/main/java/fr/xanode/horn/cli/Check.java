@@ -25,25 +25,24 @@ public class Check implements Callable<Integer> {
 
     @Override
     public Integer call() {
-        System.out.println("Getting RSS feed...");
+        log.info("Getting RSS feed...");
         FlowProvider rssFlowProvider = new RssFlowProvider("https://www.cert.ssi.gouv.fr/feed/");
         ArrayList<Item> items = new ArrayList<>();
-        System.out.print("Filtering by patterns... ");
+        log.info("Filtering by patterns... ");
         for (String pattern : patterns) {
             items.addAll(rssFlowProvider.getItems(pattern));
         }
-        System.out.println("Done.");
-        System.out.println(items.size() + " items found matching " + Arrays.toString(patterns) + ".");
+        log.info("Items filtered.");
+        log.info(items.size() + " items found matching " + Arrays.toString(patterns) + ".");
         if (bounds != null) {
-            System.out.print("Filtering by date... ");
+            log.info("Filtering by date... ");
             items.retainAll(rssFlowProvider.getItems(bounds[0], bounds[1]));
-            System.out.println("Done.\n");
+            log.info("Items filtered.");
         }
         for (Item item : items) {
             System.out.println(item + "\n");
         }
-        System.out.println("\n" + items.size() + " items found matching criteria.");
-        // TODO: Use proper logging system
+        log.info(items.size() + " items found matching criteria.");
         // TODO: Browse every flow provider
         return 0;
     }

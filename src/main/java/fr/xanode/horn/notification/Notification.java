@@ -1,13 +1,17 @@
 package fr.xanode.horn.notification;
 
 import fr.xanode.horn.providers.flow.Item;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
+@EqualsAndHashCode
 public class Notification implements Comparable<Notification> {
 
     private final Item item;
-    private NotificationState state;
+    @Getter @Setter private NotificationState state;
     private Date queuingDate;
 
     public Notification(Item item) {
@@ -20,16 +24,8 @@ public class Notification implements Comparable<Notification> {
         return "[HORN SECURITY SERVICE] " + this.item.getTitle();
     }
 
-    public void setNotificationSate(NotificationState state) {
-        this.state = state;
-    }
-
     public void updateQueuingDate() {
         this.queuingDate = new Date();
-    }
-
-    public NotificationState getNotificationState() {
-        return this.state;
     }
 
     public String toPlainText() {
@@ -45,23 +41,6 @@ public class Notification implements Comparable<Notification> {
                 + "<p>" + this.item.getPublicationDate() + "</p><br />\n"
                 + "<p>" + this.item.getDescription() + "</p><br />\n"
                 + "<href a=\"" + this.item.getLink() + "\">Additional information here (" + this.item.getLink() +").</href>\n";
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((item == null) ? 0 : item.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Notification other)) return false;
-        return this.item.equals(other.item)
-                && this.state.equals(other.state)
-                && this.queuingDate.equals(other.queuingDate);
     }
 
     @Override

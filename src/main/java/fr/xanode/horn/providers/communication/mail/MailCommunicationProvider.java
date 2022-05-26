@@ -23,7 +23,7 @@ public class MailCommunicationProvider extends CommunicationProvider {
     public void sendNotification(Notification notification) {
         super.sendNotification(notification);
         // Setting notification state to sending
-        notification.setNotificationSate(NotificationState.SENDING);
+        notification.setState(NotificationState.SENDING);
         // Initiate connection
         String username = this.getProperties().getProperty("username");
         String password = this.getProperties().getProperty("password");
@@ -52,10 +52,10 @@ public class MailCommunicationProvider extends CommunicationProvider {
 
             log.info("Notification " + notification.hashCode() + " successfully sent.");
             // Set notification state to sent and remove it from notification queue
-            notification.setNotificationSate(NotificationState.SENT);
+            notification.setState(NotificationState.SENT);
             this.removeNotification(notification);
         } catch (MessagingException e) {
-            notification.setNotificationSate(NotificationState.FAILED);
+            notification.setState(NotificationState.FAILED);
             log.error("Failed to send notification " + notification.hashCode() + ": " + e.getMessage());
         }
     }

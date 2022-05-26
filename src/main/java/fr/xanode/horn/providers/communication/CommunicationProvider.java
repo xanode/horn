@@ -2,6 +2,9 @@ package fr.xanode.horn.providers.communication;
 
 import fr.xanode.horn.notification.Notification;
 import fr.xanode.horn.notification.NotificationState;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -11,26 +14,22 @@ import java.util.Properties;
 import java.util.concurrent.PriorityBlockingQueue;
 
 @Slf4j
+@RequiredArgsConstructor
 public class CommunicationProvider {
 
-    private final Properties properties;
+    @Getter private final @NonNull Properties properties;
 
-    private PriorityBlockingQueue<Notification> notificationQueue;
-
-    public CommunicationProvider(Properties properties) {
-        this.properties = properties;
-        this.notificationQueue = new PriorityBlockingQueue<>();
-    }
+    private PriorityBlockingQueue<Notification> notificationQueue = new PriorityBlockingQueue<>();
 
     public void loadNotification(Notification notification) {
-        notification.setNotificationSate(NotificationState.PENDING);
+        notification.setState(NotificationState.PENDING);
         notification.updateQueuingDate();
         this.notificationQueue.add(notification);
         log.trace("Notification " + notification.hashCode() + " loaded.");
     }
 
     public void removeNotification(Notification notification) {
-        if (notification.getNotificationState() != NotificationState.SENT) {
+        if (notification.getState() != NotificationState.SENT) {
             log.warn("Remove unsent notification " + notification.hashCode() + " from queue!");
         } else {
             log.info("Remove notification " + notification.hashCode() + " from queue.");
@@ -44,7 +43,7 @@ public class CommunicationProvider {
             log.error("Notification " + notification.hashCode() + " not loaded or already sent!");
             throw new IllegalArgumentException("Notification not loaded or already sent!");
         }
-        if (notification.getNotificationState() == NotificationState.SENDING || notification.getNotificationState() == NotificationState.SENT) {
+        if (notification.getState() == NotificationState.SENDING || notification.getState() == NotificationState.SENT) {
             log.error("Notification " + notification.hashCode() + " already sent!");
             throw new IllegalArgumentException("Notification already sent!");
         }
@@ -79,9 +78,5 @@ public class CommunicationProvider {
             throw new IllegalArgumentException("Empty queue!");
         }
         this.sendNotification(this.notificationQueue.peek());
-    }
-
-    public Properties getProperties() {
-        return properties;
     }
 }

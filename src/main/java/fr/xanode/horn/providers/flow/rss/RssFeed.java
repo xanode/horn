@@ -1,12 +1,12 @@
 package fr.xanode.horn.providers.flow.rss;
 
 import fr.xanode.horn.providers.flow.Item;
-import lombok.*;
+import lombok.Data;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 
-@RequiredArgsConstructor
-@Getter @Setter @ToString
+@Data
 public class RssFeed {
 
     public @NonNull String title;
