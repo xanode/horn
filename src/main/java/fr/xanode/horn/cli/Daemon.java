@@ -53,7 +53,7 @@ public class Daemon implements Runnable {
                 Notification notification = new Notification(lastItem);
                 log.info("Sending notification");
                 mailCommunicationProvider.loadNotification(notification);
-                mailCommunicationProvider.flushNotificationQueue();
+                mailCommunicationProvider.sendHeadNotification();
             } catch (IOException e) {
                 log.error("Unable to load configuration file: " + e.getMessage());
             }
